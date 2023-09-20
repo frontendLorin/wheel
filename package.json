@@ -9,9 +9,8 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-  },
   "devDependencies": {
+    "@types/node": "^20.6.3",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "commitlint": "^17.7.1",

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <script>
+      /**
+       * bundle.js 原型
+       * 1、收集依赖
+       * 2、ES6 转 ES5
+       * 3、替换 exports、require
+       *
+       */
+      (function (depGraph) {
+        const require = (file) => {
+          const exports = {};
+
+          (function (exports, code) {
+            eval(code);
+          })(exports, depGraph[file]);
+
+          return exports;
+        };
+
+        require('./index.js');
+      })({
+        './add.js': `
+          exports.default = (a, b) => {
+            return a + b;
+          };
+        `,
+        './index.js': `
+          const add = require('./add.js').default;
+          const res = add(1, 2);
+          console.log(res);
+        `
+      });
+    </script> -->
+    <script src="../dist/bundle.js"></script>
+  </body>
+</html>

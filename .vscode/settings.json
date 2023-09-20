@@ -6,5 +6,6 @@
   "editor.formatOnSave": true, // 开启保存文件自动格式化代码
   "editor.defaultFormatter": "esbenp.prettier-vscode", // 默认的代码格式化工具
   "prettier.requireConfig": true,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "liveServer.settings.port": 5501
 }
