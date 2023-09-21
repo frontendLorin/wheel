@@ -3,6 +3,9 @@ const path = require('path');
 const babel = require('@babel/core');
 const parser = require('@babel/parser');
 const traverse = require('@babel/traverse').default;
+const pwd = process.env.PWD;
+const config = require(path.resolve(process.env.PWD, 'webpack.config'));
+const { getAbsPath } = require('../utils');
 
 /**
  * 获取模块信息
@@ -10,8 +13,7 @@ const traverse = require('@babel/traverse').default;
  * @returns {{deps: {}, file: String, code: String}}
  */
 const getModuleInfo = (file) => {
-  const dirname = path.dirname(file);
-
+  const dirname = path.resolve(pwd, path.dirname(file));
   // 收集模块依赖
   const deps = {};
 
@@ -20,20 +22,27 @@ const getModuleInfo = (file) => {
 
   // 编译过程： 代码字符串 => ast 抽象语法树对象 => ast 抽象语法树遍历解析 => 代码字符串
   // 将文件内容转化为抽象语法树
-  const ats = parser.parse(body, { sourceType: 'module' });
+  const ast = parser.parse(body, { sourceType: 'module' });
 
   // 遍历抽象语法树，收集模块依赖
-  traverse(ats, {
+  traverse(ast, {
     // import 节点 visitor
     ImportDeclaration({ node }) {
       const sourcePath = node.source.value;
       const absPath = `${path.resolve(dirname, sourcePath)}`;
       deps[sourcePath] = absPath;
+    },
+    enter(pathObj) {
+      if (pathObj.node.type === 'CallExpression' && pathObj.node.callee.name === 'require') {
+        const sourcePath = pathObj.node.arguments[0].value;
+        const absPath = `${path.resolve(dirname, sourcePath)}`;
+        deps[sourcePath] = absPath;
+      }
     }
   });
 
   // 将抽象语法书转换为 ES5 代码
-  const code = babel.transformFromAst(ats, null, {
+  const code = babel.transformFromAst(ast, null, {
     presets: ['@babel/preset-env']
   }).code;
 
@@ -83,28 +92,47 @@ const parseModules = (file) => {
   return depsGraph;
 };
 
+/**
+ * 打包
+ * @param {string} file
+ * @returns {string}
+ */
 function bundle(file) {
   const depsGraph = JSON.stringify(parseModules(file));
+
   return `(function (graph) {
         function require(file) {
             function absRequire(relPath) {
                 return require(graph[file].deps[relPath]);
             }
+
             var exports = {};
-            (function (require,exports,code) {
+            var module = {exports: exports};
+
+            (function (require, module, exports, code) {
                 eval(code);
-            })(absRequire,exports,graph[file].code)
-            return exports;
+            })(absRequire,module,exports,graph[file].code)
+
+            return module.exports;
         }
         require('${file}')
     })(${depsGraph})`;
 }
 
-const content = bundle('./src/index.js');
+/**
+ * 启动打包程序
+ * @returns {any}
+ */
+const bootstrap = () => {
+  const content = bundle(getAbsPath(config.entry));
+  const outputDir = getAbsPath(config.output.path);
 
-if (!fs.existsSync('./dist')) {
-  fs.mkdirSync('./dist');
-}
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
 
-//写入打包后的内容
-fs.writeFileSync('./dist/bundle.js', content);
+  // 写入打包后的内容
+  fs.writeFileSync(path.resolve(outputDir, config.output.filename), content);
+};
+
+bootstrap();

@@ -1,0 +1,4 @@
+/dist
+/src
+nodemon.json
+webpack.config.js
