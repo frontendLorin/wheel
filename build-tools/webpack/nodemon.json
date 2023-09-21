@@ -1,5 +1,5 @@
 {
-  "watch": ["src", "./bin/webpack.js"],
-  "exec": "node ./bin/webpack.js",
+  "watch": ["src", "./publish/bin/webpack.js"],
+  "exec": "node ./publish/bin/webpack.js",
   "ext": "js"
 }
