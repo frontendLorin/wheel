@@ -14,7 +14,7 @@ jobs:
 
       - name: install
         run: |
-          npm install pnpm -g
+          sudo apt-get install pnpm
           pnpm install
 
       - name: lint
