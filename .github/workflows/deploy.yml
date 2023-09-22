@@ -2,15 +2,17 @@ name: deploy
 
 on:
   push:
-    - 'main'
+    branches:
+      - 'main'
 
 jobs:
-    'lint'
-      runs-on: ubuntu-latest
-      steps:
-        - name: checkout
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
         uses: actions/checkout@v4
-        - name: lint
+
+      - name: lint
         run: |
           pnpm install
           pnpm type-check
