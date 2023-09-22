@@ -1,0 +1,16 @@
+name: deploy
+
+on:
+  push:
+    - 'main'
+
+jobs:
+    lint
+      runs-on: ubuntu-latest
+      steps:
+        - name: checkout
+        uses: actions/checkout@v4
+        - name: install
+        uses: |
+          pnpm install
+          pnpm type-check
