@@ -14,5 +14,5 @@ jobs:
 
       - name: lint
         run: |
-          pnpm install
-          pnpm type-check
+          npm install
+          npm run type-check
