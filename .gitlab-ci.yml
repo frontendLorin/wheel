@@ -1,0 +1,14 @@
+images: node:18
+
+stages:
+  - deploy
+
+lint-job:
+  stage: deploy
+  only:
+    - master
+  scripts:
+    - npm install pnpm -g
+    - pnpm install
+    - pnpm type-check
+    - pnpm lint
