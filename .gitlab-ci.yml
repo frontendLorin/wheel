@@ -3,6 +3,7 @@ image: node:18
 stages:
   - lint
   - build
+  - deploy
 
 before_script:
   - npm install pnpm@7.27.1 -g
@@ -28,3 +29,11 @@ build-job:
     - master
   script:
     - echo 'build success'
+
+deploy-job:
+ stage: deploy
+ only:
+    - master
+  when: manual
+  script:
+    - echo 'deploy success'
