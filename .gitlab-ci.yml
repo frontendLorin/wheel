@@ -31,8 +31,8 @@ build-job:
     - echo 'build success'
 
 deploy-job:
- stage: deploy
- only:
+  stage: deploy
+  only:
     - master
   when: manual
   script:
