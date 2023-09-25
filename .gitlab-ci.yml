@@ -4,7 +4,7 @@ stages:
   - deploy
 
 before_script:
-  - npm install pnpm -g
+  - npm install pnpm@7.27.1 -g
   - pnpm install
 
 lint-job:
