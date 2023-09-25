@@ -27,6 +27,7 @@ build-job:
   stage: build
   only:
     - master
+  parallel: 2
   script:
     - echo 'build success'
 
