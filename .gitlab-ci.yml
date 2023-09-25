@@ -35,5 +35,7 @@ deploy-job:
   only:
     - master
   when: manual
+  retry: 2
+  timeout: 1m
   script:
     - echo 'deploy success'
