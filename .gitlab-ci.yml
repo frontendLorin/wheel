@@ -1,16 +1,22 @@
 image: node:18
 
 stages:
-  - deploy
+  - lint
 
 before_script:
   - npm install pnpm@7.27.1 -g
   - pnpm install
 
-lint-job:
-  stage: deploy
+type-check-job:
+  stage: lint
   only:
     - master
   script:
     - pnpm type-check
+
+lint-job:
+  stage: lint
+  only:
+    - master
+  script:
     - pnpm lint
