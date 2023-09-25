@@ -7,7 +7,7 @@ lint-job:
   stage: deploy
   only:
     - master
-  scripts:
+  script:
     - npm install pnpm -g
     - pnpm install
     - pnpm type-check
