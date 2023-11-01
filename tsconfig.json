@@ -9,5 +9,6 @@
     "allowJs": true, // 是否允许使用 js 文件
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
-  }
+  },
+  "exclude": ["node_modules"]
 }

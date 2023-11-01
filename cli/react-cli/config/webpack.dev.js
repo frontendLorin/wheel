@@ -33,10 +33,11 @@ module.exports = {
   devServer: {
     host: '0.0.0.0',
     open: true,
-    hot: true
+    hot: true,
+    historyApiFallback: true
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
+    path: undefined,
     filename: 'js/[name].js',
     chunkFilename: 'js/[name].chunk.js'
   },
@@ -89,8 +90,8 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              // cacheDirectory: true,
-              // cacheCompression: false,
+              cacheDirectory: true,
+              cacheCompression: false,
               plugins: [require.resolve('react-refresh/babel')]
             }
           }
@@ -112,7 +113,24 @@ module.exports = {
   ],
   optimization: {
     splitChunks: {
-      chunks: 'all'
+      chunks: 'all',
+      cacheGroups: {
+        react: {
+          priority: 100,
+          test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)/,
+          name: 'chunk-react'
+        },
+        antd: {
+          priority: 90,
+          test: /[\\/]node_modules[\\/]antd/,
+          name: 'chunk-antd'
+        },
+        lib: {
+          priority: 80,
+          test: /[\\/]node_modules[\\/]/,
+          name: 'chunk-lib'
+        }
+      }
     },
     runtimeChunk: {
       name: (entrypoint) => `runtime~${entrypoint.name}.js`
