@@ -1,5 +1,5 @@
 import React, { memo, lazy, Suspense } from 'react';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 const Home = lazy(() => import(/* webpackPrefetch: true */ './pages/Home'));
@@ -19,6 +19,7 @@ const App = () => {
         </ul>
         <Suspense fallback={<div>loading...</div>}>
           <Routes>
+            <Route path="/" element={<Navigate to="/home" />}></Route>
             <Route path="/home" element={<Home />}></Route>
             <Route path="/my" element={<My />}></Route>
           </Routes>
